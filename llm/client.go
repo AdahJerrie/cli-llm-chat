@@ -1,17 +1,18 @@
 package llm
 
 import (
-	"encoding/json"
 	"net/http"
 )
-// struct for request body
+
 type Client struct {
-	BaseURL string `json:"baseurl"`
-	Model   string `json:"model"`
-	Prompt  string `json:"prompt"`
-	httpCLient *http.Client 
+	baseURL    string
+	httpClient *http.Client
 }
 
-func NewClient(c *Client) (string, error) {
-	bytedata, error := json.Marshal(c.Prompt)
+// a constructor that creates the client from scratch
+func NewClient(baseURL string) *Client {
+	return &Client{
+		baseURL:    baseURL,
+		httpClient: &http.Client{},
+	}
 }
