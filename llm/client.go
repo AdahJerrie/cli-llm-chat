@@ -1,6 +1,7 @@
 package llm
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -47,5 +48,20 @@ func (c *Client) Generate(prompt string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("encoding request body: %w", err)
 	}
-	return "", nil
+
+	//construct/build the http request
+	req, err := http.NewRequest(http.MethodPost, c.baseURL+"/api/generate", bytes.NewReader(dataByte))
+	if err != nil {
+		return "", fmt.Errorf("buiding request: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+	
+	//send the request and read the response
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return "",  fmt.Errorf("Retrieving response: %w", err)
+	}
+	defer resp.Body.Close()
+
+	return, nil
 }
