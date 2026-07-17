@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 )
 
@@ -34,11 +35,11 @@ func NewClient(baseURL string) *Client {
 }
 
 // the generate method: this compiles the needed request to the llm and the response from the llm
-func (c *Client) Generate(prompt string) (string, error) {
+func (c *Client) Generate(prompt string, model string) (string, error) {
 
 	//build request struct from the prompt
 	reqBody := GenerateRequest{
-		Model:  "llama3",
+		Model:  model,
 		Prompt: prompt,
 		Stream: false,
 	}
@@ -55,13 +56,25 @@ func (c *Client) Generate(prompt string) (string, error) {
 		return "", fmt.Errorf("buiding request: %w", err)
 	}
 	req.Header.Set("Content-Type", "application/json")
-	
+
 	//send the request and read the response
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return "",  fmt.Errorf("Retrieving response: %w", err)
+		return "", fmt.Errorf("retrieving response: %w", err)
 	}
 	defer resp.Body.Close()
 
-	return, nil
+	//drain the entire response from resp.Body
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("reading response body: %w", err)
+	}
+
+	//write from the body into existing variable.
+	var genResp GenerateResponse
+	if err := json.Unmarshal(body, &genResp); err != nil {
+		return "", fmt.Errorf("decoding response body: %w", err)
+	}
+
+	return genResp.Response, nil
 }
