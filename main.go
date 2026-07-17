@@ -1,14 +1,17 @@
 package main
 
 import (
-	"net/http"
-	"encoding/json"
 	"cli-chat/llm"
+	"fmt"
 )
 
 func main() {
-	mux := http.NewServeMux()
-	mux.S("POST /api/generate", llm.NewClient)
+	client := llm.NewClient("http://localhost:11434")
 
-	http.ListenAndServe(":11434", mux)
+	resp, err := client.Generate("what is the shape of the earth", "llama3")
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	fmt.Println(resp)
 }
