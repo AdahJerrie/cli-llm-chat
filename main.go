@@ -1,14 +1,25 @@
 package main
 
 import (
+	"bufio"
 	"cli-chat/llm"
 	"fmt"
+	"os"
 )
 
 func main() {
-	client := llm.NewClient("http://localhost:11434")
+	scanner := bufio.NewScanner(os.Stdin)
+	if !scanner.Scan() {
+		fmt.Println("Error reading input:", scanner.Err())
+		return
+	}
+	input := scanner.Text()
 
-	resp, err := client.Generate("what is the shape of the earth", "llama3")
+	fmt.Println("start chat: ", input)
+
+	client := llm.NewClient("http://localhost:8080")
+
+	resp, err := client.Generate(input, "llama3")
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
