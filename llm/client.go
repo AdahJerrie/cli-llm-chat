@@ -2,6 +2,7 @@ package llm
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -35,7 +36,7 @@ func NewClient(baseURL string) *Client {
 }
 
 // the generate method: this compiles the needed request to the llm and the response from the llm
-func (c *Client) Generate(prompt string, model string) (string, error) {
+func (c *Client) Generate(ctx context.Context, prompt string, model string) (string, error) {
 
 	//build request struct from the prompt
 	reqBody := GenerateRequest{
@@ -51,7 +52,7 @@ func (c *Client) Generate(prompt string, model string) (string, error) {
 	}
 
 	//construct/build the http request
-	req, err := http.NewRequest(http.MethodPost, c.baseURL+"/api/generate", bytes.NewReader(dataByte))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.baseURL+"/api/generate", bytes.NewReader(dataByte))
 	if err != nil {
 		return "", fmt.Errorf("buiding request: %w", err)
 	}
