@@ -3,8 +3,10 @@ package main
 import (
 	"bufio"
 	"cli-chat/llm"
+	"context"
 	"fmt"
 	"os"
+	"time"
 )
 
 func main() {
@@ -17,9 +19,12 @@ func main() {
 
 	fmt.Println("start chat: ", input)
 
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
 	client := llm.NewClient("http://localhost:8080")
 
-	resp, err := client.Generate(input, "llama3")
+	resp, err := client.Generate(ctx, input, "llama3")
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
