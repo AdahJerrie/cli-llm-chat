@@ -12,7 +12,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/generate", generateHandler)
 
-	fmt.Printf("starting mock-server on port 8080")
+	fmt.Println("starting mock-server on port 8080")
 	if err := http.ListenAndServe(":8080", mux); err != nil {
 		fmt.Print("starting server:", err)
 	}
