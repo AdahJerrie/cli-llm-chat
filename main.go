@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	config, err := config.LoadConfig()
+	cfg, err := config.LoadConfig()
 	if err != nil {
 		fmt.Println("Error loading configuration:", err)
 		return
@@ -29,9 +29,9 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	client := llm.NewClient(config.BaseURL)
+	client := llm.NewClient(cfg.BaseURL)
 
-	resp, err := client.Generate(ctx, input, config.Model)
+	resp, err := client.Generate(ctx, input, cfg.Model)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
