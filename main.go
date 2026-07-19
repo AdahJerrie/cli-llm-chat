@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"cli-chat/config"
 	"cli-chat/llm"
 	"context"
 	"fmt"
@@ -10,6 +11,12 @@ import (
 )
 
 func main() {
+	config, err := config.LoadConfig()
+	if err != nil {
+		fmt.Println("Error loading configuration:", err)
+		return
+	}
+
 	scanner := bufio.NewScanner(os.Stdin)
 	if !scanner.Scan() {
 		fmt.Println("Error reading input:", scanner.Err())
@@ -22,9 +29,9 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	client := llm.NewClient("http://localhost:8080")
+	client := llm.NewClient(config.BaseURL)
 
-	resp, err := client.Generate(ctx, input, "llama3")
+	resp, err := client.Generate(ctx, input, config.Model)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
