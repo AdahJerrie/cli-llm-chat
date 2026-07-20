@@ -1,7 +1,6 @@
 package config
 
 import (
-	"errors"
 	"os"
 )
 
@@ -12,16 +11,18 @@ type Config struct {
 	APIKey  string
 }
 
+const defaultBaseURL, defaultModel string = "http://localhost:11434", "llama3"
+
 // build/load the configuration from environment variables or a configuration file.
-func LoadConfig() (*Config, error) {
+func Load() (*Config, error) {
 	baseURL := os.Getenv("BASE_URL")
 	model := os.Getenv("MODEL")
 
 	if baseURL == "" {
-		return nil, errors.New("BASE_URL environment variable is required")
+		baseURL = defaultBaseURL
 	}
 	if model == "" {
-		return nil, errors.New("MODEL environment variable is required")
+		model = defaultModel
 	}
 
 	return &Config{
