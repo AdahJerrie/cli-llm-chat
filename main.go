@@ -24,7 +24,7 @@ func main() {
 		return
 	}
 
-	fmt.Print(">>")
+	fmt.Print(">")
 	scanner := bufio.NewScanner(os.Stdin)
 	if !scanner.Scan() {
 		fmt.Println("Error reading input:", scanner.Err())
