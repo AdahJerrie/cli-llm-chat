@@ -11,7 +11,7 @@ type Config struct {
 	APIKey  string
 }
 
-const defaultBaseURL, defaultModel string = "http://localhost:11434", "llama3"
+const defaultBaseURL, defaultModel string = "http://localhost:8080", "llama3"
 
 // build/load the configuration from environment variables or a configuration file.
 func Load() (*Config, error) {
