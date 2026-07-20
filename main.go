@@ -8,10 +8,17 @@ import (
 	"fmt"
 	"os"
 	"time"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	cfg, err := config.LoadConfig()
+
+	if err := godotenv.Load(); err != nil {
+		fmt.Println("No .env file found, using system environment variables")
+	}
+
+	cfg, err := config.Load()
 	if err != nil {
 		fmt.Println("Error loading configuration:", err)
 		return
