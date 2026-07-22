@@ -10,3 +10,26 @@ That's the entire reason HTTP exists in this context: it's a shared language two
 │              │◀─── 2. HTTP Response ──────── │               │
 └──────────────┘      (status code, headers,    └──────────────┘
                        body = JSON with reply)
+
+
+cli-chat/
+│
+├── cmd/
+│   └── cli-chat/
+│       └── main.go
+│
+├── internal/
+│   ├── config/
+│   ├── llm/
+│   │   ├── client.go
+│   │   ├── types.go
+│   │   └── errors.go
+│   └── chat/
+│
+├── mock-server/
+│
+├── .env.example
+│
+├── README.md
+│
+└── go.mod
