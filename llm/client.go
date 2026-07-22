@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 )
 
 type Client struct {
@@ -30,8 +31,10 @@ type GenerateResponse struct {
 // a constructor func that creates the client from scratch
 func NewClient(baseURL string) *Client {
 	return &Client{
-		baseURL:    baseURL,
-		httpClient: &http.Client{},
+		baseURL: baseURL,
+		httpClient: &http.Client{
+			Timeout: 15 * time.Second,
+		},
 	}
 }
 
@@ -54,12 +57,15 @@ func (c *Client) Generate(ctx context.Context, prompt string, model string) (str
 	//construct/build the http request
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.baseURL+"/api/generate", bytes.NewReader(dataByte))
 	if err != nil {
-		return "", fmt.Errorf("buiding request: %w", err)
+		return "", fmt.Errorf("building request: %w", err)
 	}
 	req.Header.Set("Content-Type", "application/json")
 
 	//send the request and read the response
 	resp, err := c.httpClient.Do(req)
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("internal server error: %d", resp.StatusCode)
+	}
 	if err != nil {
 		return "", fmt.Errorf("retrieving response: %w", err)
 	}
