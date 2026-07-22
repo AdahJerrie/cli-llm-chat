@@ -28,7 +28,7 @@ type GenerateResponse struct {
 	Done       bool   `json:"done"`
 }
 
-// a constructor func that creates the client from scratch
+// 1.  a constructor func that creates the client from scratch
 func NewClient(baseURL string) *Client {
 	return &Client{
 		baseURL: baseURL,
@@ -63,9 +63,6 @@ func (c *Client) Generate(ctx context.Context, prompt string, model string) (str
 
 	//send the request and read the response
 	resp, err := c.httpClient.Do(req)
-	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("internal server error: %d", resp.StatusCode)
-	}
 	if err != nil {
 		return "", fmt.Errorf("retrieving response: %w", err)
 	}
@@ -75,6 +72,10 @@ func (c *Client) Generate(ctx context.Context, prompt string, model string) (str
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return "", fmt.Errorf("reading response body: %w", err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("generate request failed: %d", resp.StatusCode)
 	}
 
 	//write from the body into existing variable.
