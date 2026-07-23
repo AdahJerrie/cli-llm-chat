@@ -48,7 +48,7 @@ func (c *Client) Generate(ctx context.Context, prompt string, model string) (str
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("generate request failed: %d %v", resp.StatusCode, string(responseBody))
+		return "", fmt.Errorf("generate request failed: %d %s", resp.StatusCode, string(responseBody))
 	}
 
 	//write from the body into existing variable.
