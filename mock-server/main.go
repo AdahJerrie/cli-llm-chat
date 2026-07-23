@@ -34,10 +34,10 @@ func generateHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	resp := llm.GenerateResponse{
-		Model:      genReq.Model,
-		Response:   "The earth was first proposed to be spherical",
-		Created_at: http.TimeFormat,
-		Done:       true,
+		Model:     genReq.Model,
+		Response:  "The earth was first proposed to be spherical",
+		CreatedAt: http.TimeFormat,
+		Done:      true,
 	}
 
 	respbyte, err := json.Marshal(resp)
