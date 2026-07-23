@@ -9,6 +9,8 @@ import (
 	"net/http"
 )
 
+const generateEndpoint = "/api/generate"
+
 // the generate method: this compiles the needed request to the llm and the response from the llm
 func (c *Client) Generate(ctx context.Context, prompt string, model string) (string, error) {
 
@@ -26,7 +28,7 @@ func (c *Client) Generate(ctx context.Context, prompt string, model string) (str
 	}
 
 	//construct/build the http request
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.baseURL+"/api/generate", bytes.NewReader(requestBody))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.baseURL+generateEndpoint, bytes.NewReader(requestBody))
 	if err != nil {
 		return "", fmt.Errorf("building request: %w", err)
 	}
