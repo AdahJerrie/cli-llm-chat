@@ -1,3 +1,4 @@
+// Package llm provides a client for communicating with an LLM server.
 package llm
 
 import (
