@@ -3,7 +3,6 @@ package llm
 
 import (
 	"net/http"
-	"time"
 )
 
 type Client struct {
@@ -14,9 +13,7 @@ type Client struct {
 // 1.  a constructor func that creates the client from scratch
 func NewClient(baseURL string) *Client {
 	return &Client{
-		baseURL: baseURL,
-		httpClient: &http.Client{
-			Timeout: 15 * time.Second,
-		},
+		baseURL:    baseURL,
+		httpClient: &http.Client{ /*Timeout: 15 * time.Second,*/ },
 	}
 }
