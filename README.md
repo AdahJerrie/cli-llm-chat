@@ -73,7 +73,7 @@ Example:
 ```env
 BASE_URL=http://localhost:8080
 MODEL=llama3
-API_KEY=
+API_KEY=your-spi-kry
 ```
 
 Required variables:
